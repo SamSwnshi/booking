@@ -60,6 +60,15 @@ const Search = () => {
     };
   }, []);
 
+  // Set state and city from query params on mount
+  useEffect(() => {
+    const stateParam = query.get("state");
+    const cityParam = query.get("city");
+    if (stateParam) setState(stateParam);
+    if (cityParam) setCity(cityParam);
+    // eslint-disable-next-line
+  }, []);
+
   // Fetch events
   useEffect(() => {
     if (state && city) {
