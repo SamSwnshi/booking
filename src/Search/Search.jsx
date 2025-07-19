@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import eventIcon from "../assets/event.png";
 import promoImg from "../assets/eventoffer2.png";
@@ -36,11 +36,29 @@ const Search = () => {
   const [cities, setCities] = useState([]);
   const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const stateRef = useRef();
+  const cityRef = useRef();
 
   // Update city options when state changes
   useEffect(() => {
     setCity(""); // Reset city when state changes
   }, [state]);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (stateRef.current && !stateRef.current.contains(event.target)) {
+        setStateDropdownOpen(false);
+      }
+      if (cityRef.current && !cityRef.current.contains(event.target)) {
+        setCityDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Fetch events
   useEffect(() => {
@@ -126,7 +144,7 @@ const Search = () => {
       <div style={{ maxWidth: 1100, margin: '0 auto', marginTop: 32, marginBottom: 32, display: 'flex', gap: 32, alignItems: 'flex-start' }}>
         <div style={{ flex: 3 }}>
           <form onSubmit={handleSearch} style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(41,166,246,0.08)', padding: '1.5rem 2rem', display: 'flex', gap: 16, alignItems: 'center' }}>
-            <div id="state" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+            <div id="state" ref={stateRef} style={{ flex: 1, minWidth: 120, position: 'relative' }}>
               <div
                 style={{ width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: 'pointer' }}
                 onClick={() => setStateDropdownOpen((open) => !open)}
@@ -162,7 +180,7 @@ const Search = () => {
                 </ul>
               )}
             </div>
-            <div id="city" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+            <div id="city" ref={cityRef} style={{ flex: 1, minWidth: 120, position: 'relative' }}>
               <div
                 style={{ width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: state && stateCityMap[state] ? 'pointer' : 'not-allowed', color: state && stateCityMap[state] ? '#000' : '#aaa' }}
                 onClick={() => state && stateCityMap[state] && setCityDropdownOpen((open) => !open)}

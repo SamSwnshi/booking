@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import HeroSlider from "../components/HeroSlider/HeroSlider";
 import Blogs from "../components/Sections/Blogs/Blogs";
@@ -31,6 +31,24 @@ const Home = () => {
   const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const stateRef = useRef();
+  const cityRef = useRef();
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (stateRef.current && !stateRef.current.contains(event.target)) {
+        setStateDropdownOpen(false);
+      }
+      if (cityRef.current && !cityRef.current.contains(event.target)) {
+        setCityDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Fetch states on mount
   useEffect(() => {
@@ -78,7 +96,7 @@ const Home = () => {
             {/* Search Card */}
             <div style={{ background: '#fff', borderRadius: 24, boxShadow: '0 8px 32px rgba(41,166,246,0.10)', padding: '2rem', maxWidth: 700, margin: '0 auto', position: 'relative' }}>
               <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-                <div id="state" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+                <div id="state" ref={stateRef} style={{ flex: 1, minWidth: 120, position: 'relative' }}>
                   <div
                     style={{ width: '100%', padding: '0.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: 'pointer' }}
                     onClick={() => setStateDropdownOpen((open) => !open)}
@@ -114,7 +132,7 @@ const Home = () => {
                     </ul>
                   )}
                 </div>
-                <div id="city" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+                <div id="city" ref={cityRef} style={{ flex: 1, minWidth: 120, position: 'relative' }}>
                   <div
                     style={{ width: '100%', padding: '0.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: selectedState ? 'pointer' : 'not-allowed', color: selectedState ? '#000' : '#aaa' }}
                     onClick={() => selectedState && setCityDropdownOpen((open) => !open)}
