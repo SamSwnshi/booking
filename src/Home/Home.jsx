@@ -29,6 +29,14 @@ const hardcodedStates = [
   "Virginia", "Massachusetts", "Indiana", "Tennessee", "Missouri"
 ];
 
+const hardcodedCities = {
+  Texas: ["Houston", "Dallas", "Austin", "San Antonio"],
+  California: ["Los Angeles", "San Francisco", "San Diego", "Sacramento"],
+  "New York": ["New York City", "Buffalo", "Rochester", "Albany"],
+  Florida: ["Miami", "Orlando", "Tampa", "Jacksonville"],
+  // Add more if needed
+};
+
 const Home = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -75,7 +83,22 @@ const Home = () => {
     if (selectedState) {
       fetch(`https://eventdata.onrender.com/cities/${selectedState}`)
         .then((res) => res.json())
-        .then((data) => setCities(data.cities || []));
+        .then((data) => {
+          if (data.cities && data.cities.length > 0) {
+            setCities(data.cities);
+          } else if (hardcodedCities[selectedState]) {
+            setCities(hardcodedCities[selectedState]);
+          } else {
+            setCities([]);
+          }
+        })
+        .catch(() => {
+          if (hardcodedCities[selectedState]) {
+            setCities(hardcodedCities[selectedState]);
+          } else {
+            setCities([]);
+          }
+        });
     } else {
       setCities([]);
       setSelectedCity("");
