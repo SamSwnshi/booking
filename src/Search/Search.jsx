@@ -34,6 +34,8 @@ const Search = () => {
   const [confirmation, setConfirmation] = useState("");
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
 
   // Update city options when state changes
   useEffect(() => {
@@ -124,25 +126,78 @@ const Search = () => {
       <div style={{ maxWidth: 1100, margin: '0 auto', marginTop: 32, marginBottom: 32, display: 'flex', gap: 32, alignItems: 'flex-start' }}>
         <div style={{ flex: 3 }}>
           <form onSubmit={handleSearch} style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(41,166,246,0.08)', padding: '1.5rem 2rem', display: 'flex', gap: 16, alignItems: 'center' }}>
-            <select
-              value={state}
-              onChange={e => setState(e.target.value)}
-              style={{ flex: 1, padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff' }}
-              required
-            >
-              <option value="">Select State</option>
-              {hardcodedStates.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-            <select
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              style={{ flex: 1, padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff' }}
-              required
-              disabled={!state || !stateCityMap[state]}
-            >
-              <option value="">Select City</option>
-              {state && stateCityMap[state] && stateCityMap[state].map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
+            <div id="state" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+              <div
+                style={{ width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: 'pointer' }}
+                onClick={() => setStateDropdownOpen((open) => !open)}
+              >
+                {state || 'Select State'}
+              </div>
+              {stateDropdownOpen && (
+                <ul style={{
+                  position: 'absolute',
+                  zIndex: 10,
+                  background: '#fff',
+                  border: '1px solid #ddd',
+                  borderRadius: 8,
+                  width: '100%',
+                  maxHeight: 180,
+                  overflowY: 'auto',
+                  margin: 0,
+                  padding: 0,
+                  listStyle: 'none',
+                }}>
+                  {hardcodedStates.map(s => (
+                    <li
+                      key={s}
+                      style={{ padding: '0.5rem 1rem', cursor: 'pointer', background: state === s ? '#e3f2fd' : '#fff' }}
+                      onClick={() => {
+                        setState(s);
+                        setStateDropdownOpen(false);
+                      }}
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div id="city" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+              <div
+                style={{ width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: state && stateCityMap[state] ? 'pointer' : 'not-allowed', color: state && stateCityMap[state] ? '#000' : '#aaa' }}
+                onClick={() => state && stateCityMap[state] && setCityDropdownOpen((open) => !open)}
+              >
+                {city || 'Select City'}
+              </div>
+              {cityDropdownOpen && (
+                <ul style={{
+                  position: 'absolute',
+                  zIndex: 10,
+                  background: '#fff',
+                  border: '1px solid #ddd',
+                  borderRadius: 8,
+                  width: '100%',
+                  maxHeight: 180,
+                  overflowY: 'auto',
+                  margin: 0,
+                  padding: 0,
+                  listStyle: 'none',
+                }}>
+                  {state && stateCityMap[state] && stateCityMap[state].map(c => (
+                    <li
+                      key={c}
+                      style={{ padding: '0.5rem 1rem', cursor: 'pointer', background: city === c ? '#e3f2fd' : '#fff' }}
+                      onClick={() => {
+                        setCity(c);
+                        setCityDropdownOpen(false);
+                      }}
+                    >
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
             {state && !stateCityMap[state] && (
               <div style={{ color: 'red', marginTop: 8 }}>No cities available for this state.</div>
             )}

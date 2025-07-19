@@ -1,7 +1,7 @@
 
 describe('Event', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/'); // Adjust the URL to match your application
+    cy.visit('https://booking-sameer-suryawanshis-projects.vercel.app/'); // Adjust the URL to match your application
   });
 
   it('should render state and city dropdown selectors correctly', () => {
@@ -73,7 +73,7 @@ describe('Event', () => {
   
   it('should render the My Bookings page with header correctly', () => {
     // Navigate to the "My Bookings" page
-    cy.visit('http://localhost:3000/my-bookings'); // Replace with the actual URL for the My Bookings page
+    cy.visit('https://booking-sameer-suryawanshis-projects.vercel.app/my-bookings'); // Replace with the actual URL for the My Bookings page
     cy.get('h1').contains('My Bookings')
   });
 
@@ -96,7 +96,7 @@ describe('Event', () => {
       win.localStorage.setItem('bookings', JSON.stringify(mockBookings));
     });
   
-    cy.visit('http://localhost:3000/my-bookings'); // Replace with actual My Bookings URL
+    cy.visit('https://booking-sameer-suryawanshis-projects.vercel.app/my-bookings'); // Replace with actual My Bookings URL
   
     cy.get('h3')
       .contains('Food Expo', { timeout: 5000 })

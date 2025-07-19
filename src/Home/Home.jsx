@@ -28,6 +28,8 @@ const Home = () => {
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+  const [stateDropdownOpen, setStateDropdownOpen] = useState(false);
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   // Fetch states on mount
@@ -76,34 +78,77 @@ const Home = () => {
             {/* Search Card */}
             <div style={{ background: '#fff', borderRadius: 24, boxShadow: '0 8px 32px rgba(41,166,246,0.10)', padding: '2rem', maxWidth: 700, margin: '0 auto', position: 'relative' }}>
               <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-                <div id="state" style={{ flex: 1, minWidth: 120 }}>
-                  <input
-                    type="text"
-                    placeholder="State"
-                    value={selectedState}
-                    onChange={e => setSelectedState(e.target.value)}
-                    list="states-list"
-                    style={{ width: '100%', padding: '0.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff' }}
-                    required
-                  />
-                  <datalist id="states-list">
-                    {states.map(state => <option key={state} value={state} />)}
-                  </datalist>
+                <div id="state" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+                  <div
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: 'pointer' }}
+                    onClick={() => setStateDropdownOpen((open) => !open)}
+                  >
+                    {selectedState || 'Select State'}
+                  </div>
+                  {stateDropdownOpen && (
+                    <ul style={{
+                      position: 'absolute',
+                      zIndex: 10,
+                      background: '#fff',
+                      border: '1px solid #ddd',
+                      borderRadius: 8,
+                      width: '100%',
+                      maxHeight: 180,
+                      overflowY: 'auto',
+                      margin: 0,
+                      padding: 0,
+                      listStyle: 'none',
+                    }}>
+                      {states.map(state => (
+                        <li
+                          key={state}
+                          style={{ padding: '0.5rem 1rem', cursor: 'pointer', background: selectedState === state ? '#e3f2fd' : '#fff' }}
+                          onClick={() => {
+                            setSelectedState(state);
+                            setStateDropdownOpen(false);
+                          }}
+                        >
+                          {state}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <div id="city" style={{ flex: 1, minWidth: 120 }}>
-                  <input
-                    type="text"
-                    placeholder="City"
-                    value={selectedCity}
-                    onChange={e => setSelectedCity(e.target.value)}
-                    list="cities-list"
-                    style={{ width: '100%', padding: '0.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff' }}
-                    required
-                    disabled={!selectedState}
-                  />
-                  <datalist id="cities-list">
-                    {cities.map(city => <option key={city} value={city} />)}
-                  </datalist>
+                <div id="city" style={{ flex: 1, minWidth: 120, position: 'relative' }}>
+                  <div
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: 16, background: '#f8fbff', cursor: selectedState ? 'pointer' : 'not-allowed', color: selectedState ? '#000' : '#aaa' }}
+                    onClick={() => selectedState && setCityDropdownOpen((open) => !open)}
+                  >
+                    {selectedCity || 'Select City'}
+                  </div>
+                  {cityDropdownOpen && (
+                    <ul style={{
+                      position: 'absolute',
+                      zIndex: 10,
+                      background: '#fff',
+                      border: '1px solid #ddd',
+                      borderRadius: 8,
+                      width: '100%',
+                      maxHeight: 180,
+                      overflowY: 'auto',
+                      margin: 0,
+                      padding: 0,
+                      listStyle: 'none',
+                    }}>
+                      {cities.map(city => (
+                        <li
+                          key={city}
+                          style={{ padding: '0.5rem 1rem', cursor: 'pointer', background: selectedCity === city ? '#e3f2fd' : '#fff' }}
+                          onClick={() => {
+                            setSelectedCity(city);
+                            setCityDropdownOpen(false);
+                          }}
+                        >
+                          {city}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <button type="submit" id="searchBtn" style={{ background: '#29a6f6', color: '#fff', border: 'none', borderRadius: 12, padding: '0.7rem 2.2rem', fontWeight: 600, fontSize: 16, display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 8px rgba(41,166,246,0.15)' }}>
                   Search
