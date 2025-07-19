@@ -39,11 +39,6 @@ const Search = () => {
   const stateRef = useRef();
   const cityRef = useRef();
 
-  // Update city options when state changes
-  useEffect(() => {
-    setCity(""); // Reset city when state changes
-  }, [state]);
-
   // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event) {
