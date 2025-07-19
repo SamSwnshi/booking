@@ -243,7 +243,7 @@ const Search = () => {
       </div>
       {/* Results Heading */}
       <div style={{ maxWidth: 900, margin: '0 auto 16px auto' }}>
-        <h1 style={{ fontWeight: 700, fontSize: 22, margin: 0 }}>{events.length} events available in </h1>
+        <h1 style={{ fontWeight: 700, fontSize: 22, margin: 0 }}>{events.length} events available in {city}</h1>
         <div style={{ color: '#888', fontSize: 15, marginBottom: 16 }}>Book tickets with minimum wait-time & verified event details</div>
         {confirmation && <div style={{ color: 'green', fontWeight: 600, marginBottom: 12 }}>{confirmation}</div>}
       </div>
