@@ -69,6 +69,11 @@ const Search = () => {
     // eslint-disable-next-line
   }, []);
 
+  // Set states to hardcodedStates on mount
+  useEffect(() => {
+    setStates(hardcodedStates);
+  }, []);
+
   // Fetch events
   useEffect(() => {
     if (state && city) {
@@ -238,7 +243,7 @@ const Search = () => {
       </div>
       {/* Results Heading */}
       <div style={{ maxWidth: 900, margin: '0 auto 16px auto' }}>
-        <h1 style={{ fontWeight: 700, fontSize: 22, margin: 0 }}>{events.length} events available in {city}</h1>
+        <h1 style={{ fontWeight: 700, fontSize: 22, margin: 0 }}>{events.length} events available in </h1>
         <div style={{ color: '#888', fontSize: 15, marginBottom: 16 }}>Book tickets with minimum wait-time & verified event details</div>
         {confirmation && <div style={{ color: 'green', fontWeight: 600, marginBottom: 12 }}>{confirmation}</div>}
       </div>
@@ -286,13 +291,13 @@ const Search = () => {
                           }}
                           onClick={() => setSelectedDate(s => ({ ...s, [event.id]: d.toISOString().split('T')[0] }))}
                         >
-                          {idx === 0 ? "Today" : d.toLocaleDateString()}
+                          <p style={{ margin: 0 }}>{idx === 0 ? "Today" : d.toLocaleDateString()}</p>
                         </button>
                       ))}
                     </div>
                     {timeSlots.map(ts => (
                       <div key={ts.label} style={{ marginBottom: 8 }}>
-                        <div style={{ fontWeight: 600, color: '#888', marginBottom: 4 }}>{ts.label}</div>
+                        <p style={{ fontWeight: 600, color: '#888', marginBottom: 4, marginTop: 0 }}>{ts.label}</p>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                           {ts.slots.map(slot => (
                             <button

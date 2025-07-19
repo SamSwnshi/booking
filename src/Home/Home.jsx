@@ -66,16 +66,7 @@ const Home = () => {
 
   // Fetch states on mount
   useEffect(() => {
-    fetch("https://eventdata.onrender.com/states")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.states && data.states.length > 0) {
-          setStates(data.states);
-        } else {
-          setStates(hardcodedStates);
-        }
-      })
-      .catch(() => setStates(hardcodedStates));
+    setStates(hardcodedStates);
   }, []);
 
   // Fetch cities when state changes
