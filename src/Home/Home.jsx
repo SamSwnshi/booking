@@ -23,6 +23,12 @@ const quickLinks = [
   { label: "Services", icon: serviceIcon },
 ];
 
+const hardcodedStates = [
+  "California", "Texas", "Florida", "New York", "Illinois", "Pennsylvania", "Ohio", "Georgia",
+  "North Carolina", "Michigan", "Nevada", "Arizona", "Washington", "Oregon", "Colorado",
+  "Virginia", "Massachusetts", "Indiana", "Tennessee", "Missouri"
+];
+
 const Home = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -54,7 +60,14 @@ const Home = () => {
   useEffect(() => {
     fetch("https://eventdata.onrender.com/states")
       .then((res) => res.json())
-      .then((data) => setStates(data.states || []));
+      .then((data) => {
+        if (data.states && data.states.length > 0) {
+          setStates(data.states);
+        } else {
+          setStates(hardcodedStates);
+        }
+      })
+      .catch(() => setStates(hardcodedStates));
   }, []);
 
   // Fetch cities when state changes
